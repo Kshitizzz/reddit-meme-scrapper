@@ -1,0 +1,15 @@
+{
+  "name": "reddit-meme-scrapper",
+  "version": "1.0.0",
+  "description": "bored you are if scrape meme this will for you enjoy you will then ok",
+  "main": "get-me-memes.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.6",
+    "puppeteer": "^8.0.0"
+  }
+}

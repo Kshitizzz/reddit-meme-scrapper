@@ -2,9 +2,12 @@ let puppeteer = require('puppeteer');
 let fs = require('fs');
 let path = require('path');
 let pdfDocument = require('pdfkit');
+let mailer = require('nodemailer');
+
 let {saveToPDF} = require("./saveToPDF.js");
 let {returnListOfSourceOfMemes} = require("./getSourceLinks.js");
 let {takeScreenshotAndSaveToFolder} = require("./screenshotAndSave.js");
+let {sendMail} = require('./sendMail.js');
 
 let memeSubReddit = process.argv.slice(2)[0];
 
@@ -63,8 +66,10 @@ let memeSubReddit = process.argv.slice(2)[0];
     console.log("Page Loaded");
     let listOfSourceOfMemes = await returnListOfSourceOfMemes(newPage, 'div > img[alt = "Post image"]');
     await takeScreenshotAndSaveToFolder(newPage, listOfSourceOfMemes, "C:/Users/kshit/Desktop/reddit-meme-scrapper/memes/");
-    await saveToPDF("./memes");
     await browserInstance.close();
+    await saveToPDF("./memes");
+    await sendMail("./memes.pdf", "kshitizomar@gmail.com", "kshitizomar@gmail.com");
+    console.log("Sending Email...")
 })();  
 
 

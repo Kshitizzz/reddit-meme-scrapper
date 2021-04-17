@@ -1,11 +1,10 @@
-// scrape the memes from reddit from your desired meme sub reddit
-// format them in a pdf file, maybe send it to user's mail
-
 let puppeteer = require('puppeteer');
 let fs = require('fs');
 let path = require('path');
 let pdfDocument = require('pdfkit');
 let {saveToPDF} = require("./saveToPDF.js");
+let {returnListOfSourceOfMemes} = require("./getSourceLinks.js");
+let {takeScreenshotAndSaveToFolder} = require("./screenshotAndSave.js");
 
 let memeSubReddit = process.argv.slice(2)[0];
 
@@ -63,35 +62,11 @@ let memeSubReddit = process.argv.slice(2)[0];
     await newPage.goto(currentSubUrl, {waitUntil : "networkidle2"}); // to filter the page randomly
     console.log("Page Loaded");
     let listOfSourceOfMemes = await returnListOfSourceOfMemes(newPage, 'div > img[alt = "Post image"]');
-    await saveToFolder(newPage, listOfSourceOfMemes, "C:/Users/kshit/Desktop/reddit-meme-scrapper/memes/");
-    await browserInstance.close();
+    await takeScreenshotAndSaveToFolder(newPage, listOfSourceOfMemes, "C:/Users/kshit/Desktop/reddit-meme-scrapper/memes/");
     await saveToPDF("./memes");
+    await browserInstance.close();
 })();  
 
 
-async function returnListOfSourceOfMemes(page, selector){
-    await page.waitForSelector('div > img[alt = "Post image"]', {visible : true});
-    function runOnConsole(selector){
-        let listOfImageElements = document.querySelectorAll(selector);
-        let sourceList = []; 
-        for(let imageElement of listOfImageElements){
 
-            sourceList.push(imageElement.getAttribute('src'));
-        }
-        return sourceList;
-    }
-    return page.evaluate(runOnConsole, selector)
-}
-
-async function saveToFolder(page, srcList, destination){
-    let counter = 1;
-    for(let src of srcList){
-        let memeFilePath = path.join(destination, "meme" + counter++ + ".PNG");
-        await page.goto(src, {waitUntil : "networkidle2"});
-        await page.screenshot(
-            {path : memeFilePath,
-            clip : {x:300, y:0, width:1300, height:880}
-        });
-    }
-}
 

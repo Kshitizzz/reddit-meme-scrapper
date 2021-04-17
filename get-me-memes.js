@@ -3,6 +3,10 @@
 
 let puppeteer = require('puppeteer');
 let fs = require('fs');
+let path = require('path');
+let pdfDocument = require('pdfkit');
+let {saveToPDF} = require("./saveToPDF.js");
+
 let memeSubReddit = process.argv.slice(2)[0];
 
 (async function(){
@@ -21,9 +25,21 @@ let memeSubReddit = process.argv.slice(2)[0];
         await newPage.waitForSelector('a[class = "M2Hk_S2yvXpsNPfZMBMur _1s79QnBguPbckxiiPvFXGP _2iuoyPiKHN3kfOoeIQalDT _3zbhtNO0bdck0oYbYRhjMC HNozj_dKjQZ59ZsfEegz8 "]',
         {visible : true})
     ]);
+
     let currentSubUrl = newPage.url();
-    let sortByWhatFlag = Math.floor((Math.random() * 4) + 1);
-    let ifTopThenSortByWhatFlag = Math.floor((Math.random() * 6) + 1);
+    let randomCounter = 0;
+    let sortByWhatFlag;
+    while(true){
+        sortByWhatFlag = Math.floor((Math.random() * 4) + 1);
+        if(++randomCounter == 10) break; // to emulate multiple random events to enable distince filter operation
+    }
+    let ifTopThenSortByWhatFlag;
+    randomCounter = 0;
+    while(true){
+        ifTopThenSortByWhatFlag = Math.floor((Math.random() * 6) + 1);
+        if(++randomCounter == 10) break; // to emulate multiple random events to enable distince filter operation
+    }
+
     switch(sortByWhatFlag){
         case 1:
             currentSubUrl = currentSubUrl + "hot";
@@ -48,6 +64,8 @@ let memeSubReddit = process.argv.slice(2)[0];
     console.log("Page Loaded");
     let listOfSourceOfMemes = await returnListOfSourceOfMemes(newPage, 'div > img[alt = "Post image"]');
     await saveToFolder(newPage, listOfSourceOfMemes, "C:/Users/kshit/Desktop/reddit-meme-scrapper/memes/");
+    await browserInstance.close();
+    await saveToPDF("./memes");
 })();  
 
 
@@ -68,10 +86,12 @@ async function returnListOfSourceOfMemes(page, selector){
 async function saveToFolder(page, srcList, destination){
     let counter = 1;
     for(let src of srcList){
-        let viewSource = await page.goto(src);
-        fs.writeFile(destination+"meme"+ counter++ + ".png", await viewSource.buffer(), err => {
-        if (err) return console.log(err);
-        console.log("Meme Saved!");
-    })
+        let memeFilePath = path.join(destination, "meme" + counter++ + ".PNG");
+        await page.goto(src, {waitUntil : "networkidle2"});
+        await page.screenshot(
+            {path : memeFilePath,
+            clip : {x:300, y:0, width:1300, height:880}
+        });
     }
 }
+

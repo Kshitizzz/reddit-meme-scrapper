@@ -18,3 +18,5 @@ P.S- I built this as my showcase project in a hackathon. I will make future upda
 * you can watch out for the progress on the console
 * after 4-5 mins there will be memes.pdf file present in your current directory, which will also be sent to the receiver email.
 
+Note: I have also incorporated a mechanism for randomness in sorting the sub-reddit, such that each time this script run, distinct 
+set of memes is scrapped.

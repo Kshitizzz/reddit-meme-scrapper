@@ -1185,6 +1185,7 @@ node_modules/yauzl/index.js
 node_modules/yauzl/LICENSE
 node_modules/yauzl/package.json
 node_modules/yauzl/README.md
+memes   
 memes/meme1.png
 memes/meme2.png
 memes/meme3.png
@@ -1207,3 +1208,11 @@ memes/meme19.png
 memes/meme20.png
 memes/meme21.png
 test.js
+node_modules
+memes.pdf
+test.pdf
+get-me-memes-test.js
+crediantials.js
+.gitignore
+nodemailertest.js
+package.json

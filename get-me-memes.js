@@ -1,4 +1,4 @@
-// scrape the top memes from reddit from your desired meme sub reddit
+// scrape the memes from reddit from your desired meme sub reddit
 // format them in a pdf file, maybe send it to user's mail
 
 let puppeteer = require('puppeteer');
@@ -11,7 +11,6 @@ let memeSubReddit = process.argv.slice(2)[0];
         defaultViewport : null,
         args : ["--start-maximized", "-disable-notifications"]
     });
-
     let newPage = await browserInstance.newPage();
     await newPage.goto("https://www.reddit.com");
     await Promise.all([await newPage.waitForSelector("#header-search-bar", {visible : true}),
@@ -23,19 +22,56 @@ let memeSubReddit = process.argv.slice(2)[0];
         {visible : true})
     ]);
     let currentSubUrl = newPage.url();
-    await newPage.goto(currentSubUrl + "top"); // to sort the page by top memes from today
-    // now scrape the current image
-    // scroll down to the next image > repeat step - 1
-    // have to figure out scraping an image 
-    // have to figure out how to save image in the pdf file
-    // have to figure out scrolling
+    let sortByWhatFlag = Math.floor((Math.random() * 4) + 1);
+    let ifTopThenSortByWhatFlag = Math.floor((Math.random() * 6) + 1);
+    switch(sortByWhatFlag){
+        case 1:
+            currentSubUrl = currentSubUrl + "hot";
+            break;
+        case 2:
+            currentSubUrl = currentSubUrl + "new";
+            break;
+        case 3: 
+            currentSubUrl = currentSubUrl + "rising";
+            break;
+        case 4: 
+            if(ifTopThenSortByWhatFlag == 1) currentSubUrl += "top/?t=hour";
+            else if(ifTopThenSortByWhatFlag == 2) currentSubUrl += "top/?t=day"; 
+            else if(ifTopThenSortByWhatFlag == 3) currentSubUrl += "top/?t=week";
+            else if(ifTopThenSortByWhatFlag == 4) currentSubUrl += "?t=month";
+            else if(ifTopThenSortByWhatFlag == 5) currentSubUrl += "?t=year";
+            else if(ifTopThenSortByWhatFlag == 6) currentSubUrl += "?t=hour";
+            break; 
+        default:
+    }
+    await newPage.goto(currentSubUrl, {waitUntil : "networkidle2"}); // to filter the page randomly
+    console.log("Page Loaded");
+    let listOfSourceOfMemes = await returnListOfSourceOfMemes(newPage, 'div > img[alt = "Post image"]');
+    await saveToFolder(newPage, listOfSourceOfMemes, "C:/Users/kshit/Desktop/reddit-meme-scrapper/memes/");
 })();  
 
 
-async function returnTopFilterClickLink(page, selector){
+async function returnListOfSourceOfMemes(page, selector){
+    await page.waitForSelector('div > img[alt = "Post image"]', {visible : true});
     function runOnConsole(selector){
-        let topFilterUrl = document.querySelector(selector).href;
-        return topFilterUrl;
+        let listOfImageElements = document.querySelectorAll(selector);
+        let sourceList = []; 
+        for(let imageElement of listOfImageElements){
+
+            sourceList.push(imageElement.getAttribute('src'));
+        }
+        return sourceList;
     }
     return page.evaluate(runOnConsole, selector)
+}
+
+async function saveToFolder(page, srcList, destination){
+    let counter = 1;
+    for(let src of srcList){
+        let viewSource = await page.goto(src);
+        fs.writeFile(destination+"meme"+ counter++ + ".png", await viewSource.buffer(), err => {
+        if (err) return console.log(err);
+        console.log("Meme Saved!");
+    })
+    }
 }

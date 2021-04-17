@@ -6,7 +6,7 @@ module.exports = {
 }
 
 
-async function sendMail(attachmentPath, receiver1, receiver2) {
+async function sendMail(attachmentPath, receiver1) {
     let transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
@@ -42,7 +42,6 @@ async function sendMail(attachmentPath, receiver1, receiver2) {
     let toSend = await transporter.sendMail({
       from: "kshitiz.omar.16ece@bml.edu.in", // sender address
       to: receiver1, // list of receivers
-      cc: receiver2,
       subject: "Piping Hot Memes Served Right In Your Inbox!", // Subject line
       text: bodyText, 
       html: bodyHtml, 

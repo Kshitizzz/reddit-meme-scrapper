@@ -10,6 +10,7 @@ let {takeScreenshotAndSaveToFolder} = require("./screenshotAndSave.js");
 let {sendMail} = require('./sendMail.js');
 
 let memeSubReddit = process.argv.slice(2)[0];
+let recieverEmail = process.argv.slice(2)[1];
 
 (async function(){
     let browserInstance = await puppeteer.launch({
@@ -20,7 +21,7 @@ let memeSubReddit = process.argv.slice(2)[0];
     let newPage = await browserInstance.newPage();
     await newPage.goto("https://www.reddit.com");
     await Promise.all([await newPage.waitForSelector("#header-search-bar", {visible : true}),
-        await newPage.type("#header-search-bar", "r/memes", {delay : 200}),
+        await newPage.type("#header-search-bar", "r/"+memeSubReddit, {delay : 200}),
         await newPage.click("#header-search-bar"),
         await newPage.waitForSelector('a[class="_20OHBqoDD71_8fv7tuG6u6 _3NseKdP3_1HONmKk_kK3_l XEkFoehJNxIH9Wlr5Ilzd "]', {visible : true}),
         await newPage.click('a[class="_20OHBqoDD71_8fv7tuG6u6 _3NseKdP3_1HONmKk_kK3_l XEkFoehJNxIH9Wlr5Ilzd "]'),
@@ -68,7 +69,7 @@ let memeSubReddit = process.argv.slice(2)[0];
     await takeScreenshotAndSaveToFolder(newPage, listOfSourceOfMemes, "C:/Users/kshit/Desktop/reddit-meme-scrapper/memes/");
     await browserInstance.close();
     await saveToPDF("./memes");
-    await sendMail("./memes.pdf", "kshitizomar@gmail.com", "kshitizomar@gmail.com");
+    await sendMail("./memes.pdf", recieverEmail);
     console.log("Sending Email...")
 })();  
 

@@ -14,7 +14,7 @@ P.S- I built this as my showcase project in a hackathon. I will make future upda
 # How to use:
 * main file of this application is - **get-me-memes.js**
 * Please go through the dependency file - package_lock.json to install all the packages required to run this app
-* launch the terminal in the same directory as the file, type node get-me-memes
+* launch the terminal in the same directory as the file, type node get-me-memes <subreddit_name> <receiver_email>
 * you can watch out for the progress on the console
-* after 4-5 mins there will be memes.pdf file present in your current directory, which will also be sent to your email.
+* after 4-5 mins there will be memes.pdf file present in your current directory, which will also be sent to the receiver email.
 

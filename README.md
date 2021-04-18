@@ -14,24 +14,21 @@ to ultimately get lost in the spiral of endless scrolling!**
 
 ## Getting Started
 
-* main file of this application is - **get-me-memes.js**
+* main file of this application is - ```get-me-memes.js```
 * launch the terminal in the same directory as the file, type ```node get-me-memes <subreddit_name> <receiver_email>```
 * you can watch out for the progress on the console
-* after a couple of minutes, a memes.pdf file should appear in your current directory
+* after a couple of minutes, a ```memes.pdf``` file should appear in your current directory
 * memes.pdf would then be sent to the ```receiver_email```
 
 ### Prerequisites
 
-* Please go through the dependency file - package_lock.json to install all the packages required to run this app
-* Modules used:
-```
-nodejs - fs, path, puppeteer, nodemailer
-```
+* Please go through the dependency file - ```package_lock.json``` to install all the packages required to run this app
 
 ## Built With
 
-* [nodejs](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [puppeteer](https://maven.apache.org/) - Dependency Management
+```
+nodejs - fs, path, puppeteer, nodemailer
+```
 
 ## Authors
 

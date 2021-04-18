@@ -1,6 +1,7 @@
 # reddit-meme-scrapper
 * This script serves you fresh memes from your favorite sub, in a piping hot pdf, delivered right to your E-Mail. 
 * Avoid endless scrolling while browsing memes and save your time while having a good laugh!
+* Tech Stack: Javascript, NodeJS(fs, path, puppeteer, nodemailer)
 
 Let's be honest, we all have a tendency to endlessly scroll our favorite meme site- Reddit, while telling our colleagues that we are on a break.
 It's all fun and games until you realize, oh fish, an hour has gone by! Then you stress about the pile of work you have yet to do. The problem
@@ -10,13 +11,14 @@ at once from your favorite sub-reddit, formats them in a PDF file, and then send
 to ultimately get lost in the spiral of endless scrolling!**
 
 P.S- I built this as my showcase project in a hackathon. I will make future updates to it.
+P.S- Project demo and explanation video: https://www.linkedin.com/posts/kshitizomar_automation-pepcoding-webdevelopment-activity-6789458306990698496-ZLfI
 
 # How to use:
-* main file of this application is - **get-me-memes.js**
+* main file of this application is - **get-me-memes.js**, all other files are modules, which help in modularizing the code.
 * Please go through the dependency file - package_lock.json to install all the packages required to run this app
 * launch the terminal in the same directory as the file, type node get-me-memes <subreddit_name> <receiver_email>
 * you can watch out for the progress on the console
 * after 4-5 mins there will be memes.pdf file present in your current directory, which will also be sent to the receiver email.
 
-Note: I have also incorporated a mechanism for randomness in sorting the sub-reddit, such that each time this script run, distinct 
+Note: I have also incorporated a mechanism for randomness in sorting the sub-reddit, such that each time this script runs, distinct 
 set of memes is scrapped.
